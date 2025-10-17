@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YEIDEP Grant Application Portal</title>
+    <link rel="shortcut icon" type="image/png" href="7.png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background: #f0f4f8;
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .app-container {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header {
+            padding: 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .header-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .profile-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ccc url('https://via.placeholder.com/40?text=User') center/cover;
+        }
+
+        .total-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+            padding-top: 20px;
+        }
+
+        .total-amount {
+            font-size: 32px;
+            font-weight: 700;
+            color: #007bff;
+        }
+
+        .profits {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+
+        .profit-item {
+            text-align: center;
+        }
+
+        .profit-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .profit-value {
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-around;
+            margin: 0 20px 20px;
+        }
+
+        .action-btn {
+            padding: 10px 30px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .buy-btn {
+            background: #e6f2ff;
+            color: #007bff;
+        }
+
+        .sell-btn {
+            background: #fff3e6;
+            color: #ff9500;
+        }
+
+        .action-btn:hover {
+            opacity: 0.9;
+        }
+
+        .beneficiaries {
+            padding: 20px;
+        }
+
+        .beneficiary-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .beneficiary-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .beneficiary-info {
+            flex: 1;
+        }
+
+        .beneficiary-name {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .beneficiary-percent {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .beneficiary-change {
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .up {
+            color: #4caf50;
+        }
+
+        .down {
+            color: #f44336;
+        }
+
+        .arrow-up::before {
+            content: '\25B2';
+            margin-right: 5px;
+        }
+
+        .arrow-down::before {
+            content: '\25BC';
+            margin-right: 5px;
+        }
+
+        .section {
+            padding: 20px;
+            display: none;
+        }
+
+        #intro {
+            display: block;
+        }
+
+        .welcome-message {
+            font-size: 16px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .amount {
+            color: #007bff;
+            font-weight: 700;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            font-size: 16px;
+        }
+
+        .error {
+            color: #f44336;
+            font-size: 14px;
+            text-align: center;
+            display: none;
+        }
+
+        .loader {
+            text-align: center;
+        }
+
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #007bff;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .fill {
+            height: 30px;
+            background: #4caf50;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .percentage {
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .tip {
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        .done {
+            text-align: center;
+            color: #4caf50;
+            font-size: 24px;
+        }
+
+        .notification-area {
+            padding: 10px;
+            background: #f9f9f9;
+            border-top: 1px solid #eee;
+        }
+
+        .notification {
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 20px;
+            display: none;
+            animation: fade 5s ease-in-out;
+        }
+
+        @keyframes fade {
+            0%, 100% { opacity: 0; }
+            10%, 90% { opacity: 1; }
+        }
+
+        .final-button {
+            background: #28a745;
+            border-radius: 20px;
+        }
+
+        .final-button:hover {
+            background: #218838;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin: 10px 0;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <img src="https://datingdivas.us/wp-content/uploads/2025/09/Federal-government-Grants-and-loan-program.jpeg" alt="Header Image" class="header-image">
+            
+            <div class="total-label">Total Grant Allocation</div>
+            <div class="total-amount">$52,398.00</div>
+        </div>
+        
+        <div class="profits">
+            <div class="profit-item">
+                <div class="profit-label">Today's Approval</div>
+                <div class="profit-value">$125.42</div>
+            </div>
+            <div class="profit-item">
+                <div class="profit-label">Total Approved</div>
+                <div class="profit-value">$25,874.42</div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="action-btn buy-btn" id="start-btn">Apply</button>
+            <button class="action-btn sell-btn">Check Status</button>
+        </div>
+
+        <div class="beneficiaries">
+            <div class="beneficiary-item">
+                <img src="https://images2.imgbox.com/f4/68/nPKBD5Fv_o.jpg" alt="Chinwe Okafor" class="beneficiary-logo">
+                <div class="beneficiary-info">
+                    <div class="beneficiary-name">Chinwe Okafor</div>
+                    <div class="beneficiary-percent">12.56%</div>
+                </div>
+                <div class="beneficiary-change up arrow-up">₦120,000</div>
+            </div>
+            <div class="beneficiary-item">
+                <img src="https://images2.imgbox.com/ea/1e/jOb3Dnox_o.jpg" alt="Emeka Nwosu" class="beneficiary-logo">
+                <div class="beneficiary-info">
+                    <div class="beneficiary-name">Emeka Nwosu</div>
+                    <div class="beneficiary-percent">7.98%</div>
+                </div>
+                <div class="beneficiary-change up arrow-up">₦80,000</div>
+            </div>
+            <div class="beneficiary-item">
+                <img src="https://images2.imgbox.com/6a/89/2rAcdk4V_o.jpg" alt="Ngozi Eze" class="beneficiary-logo">
+                <div class="beneficiary-info">
+                    <div class="beneficiary-name">Ngozi Eze</div>
+                    <div class="beneficiary-percent">10.14%</div>
+                </div>
+                <div class="beneficiary-change down arrow-down">₦50,000</div>
+            </div>
+            <div class="beneficiary-item">
+                <img src="https://images2.imgbox.com/23/b4/vFsp8yAa_o.png" alt="Jide Kosoko" class="beneficiary-logo">
+                <div class="beneficiary-info">
+                    <div class="beneficiary-name">Jide Kosoko</div>
+                    <div class="beneficiary-percent">5.32%</div>
+                </div>
+                <div class="beneficiary-change down arrow-down">₦60,000</div>
+            </div>
+        </div>
+
+        <div class="section" id="intro" style="display: none;">
+            <p class="welcome-message">
+                <!-- Removed "Proceed to Application" text -->
+            </p>
+        </div>
+
+        <div class="section loader" id="initial-loader">
+            <p>Please wait...</p>
+            <div class="spinner"></div>
+            <div id="load-percent">0%</div>
+        </div>
+
+        <div class="section" id="info">
+            <label for="account">Account Number:</label>
+            <input type="number" id="account" placeholder="Enter account number" onkeypress="return /[0-9]/.test(event.key)">
+            
+            <label for="bank">Select Bank:</label>
+            <select id="bank">
+                <option value="" selected>Select Bank</option>
+                <option value="access">Access Bank Plc - ₦50,000 - ₦500,000</option>
+                <option value="wema">Wema Bank Plc - ₦50,000 - ₦500,000</option>
+                <!-- Add all other bank options as before -->
+                <option value="other">Other Banks - ₦50,000 - ₦500,000</option>
+            </select>
+            <button id="submit-details">Submit</button>
+            <p class="error">Valid account number required (min 4 digits).</p>
+        </div>
+
+        <div class="section" id="checking">
+            <p>Verifying...</p>
+            <div class="progress-bar">
+                <div class="fill" id="verify-fill"></div>
+            </div>
+            <div class="percentage" id="verify-percent">0%</div>
+        </div>
+
+        <div class="section" id="share">
+            <p class="tip">Account: <span id="display-account"></span></p>
+            <p class="tip">Qualified for <span class="amount">₦150,000</span>.</p>
+            <ul class="tip">
+                <li>Share with 5 friends on WhatsApp.</li>
+                <li>Wait for verification.</li>
+                <li>SMS in 15 min.</li>
+            </ul>
+            <button id="share-btn">Share</button>
+            <div class="progress-bar">
+                <div class="fill" id="share-fill"></div>
+            </div>
+            <div class="percentage" id="share-percent">0%</div>
+        </div>
+
+        <div class="section" id="claim">
+            <p class="done"><i class="fas fa-check-circle fa-3x"></i></p>
+            <p>Complete!</p>
+            <button id="verify-offer">Verify</button>
+            <a href="https://obqj2.com/4/9321350" target="_blank"><button class="final-button">Receive</button></a>
+            <a href="https://obqj2.com/4/9321350" target="_blank"><button class="final-button">Status</button></a>
+            <a href="https://obqj2.com/4/9321350" target="_blank"><button class="final-button">Claim Bonus</button></a>
+        </div>
+
+        <div class="notification-area">
+            <div class="notification" id="notif1">Chinwe Okafor received ₦120,000 - 15 sec ago</div>
+            <div class="notification" id="notif2">Emeka Nwosu received ₦80,000 - 20 sec ago</div>
+            <div class="notification" id="notif3">Ngozi Eze received ₦120,000 - 25 sec ago</div>
+            <div class="notification" id="notif4">Jide Kosoko received ₦80,000 - 30 sec ago</div>
+            <!-- Add more as needed -->
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Start with dashboard view, click 'Apply' to show form sections
+        $('.section').hide();
+        $('#intro').show();
+
+        $('.buy-btn').click(() => {
+            $('.beneficiaries, .profits, .actions').fadeOut();
+            $('#initial-loader').fadeIn();
+            let progress = 0;
+            const loaderInterval = setInterval(() => {
+                progress++;
+                $('#load-percent').text(progress + '%');
+                if (progress >= 100) {
+                    clearInterval(loaderInterval);
+                    $('#initial-loader').fadeOut();
+                    $('#info').fadeIn();
+                }
+            }, 50);
+        });
+
+        $('#submit-details').click(() => {
+            const account = $('#account').val();
+            if (account.length < 4) {
+                $('.error').fadeIn();
+                return;
+            }
+            $('.error').fadeOut();
+            $('#info').fadeOut();
+            $('#checking').fadeIn();
+            let verifyProgress = 0;
+            const verifyInterval = setInterval(() => {
+                verifyProgress++;
+                $('#verify-percent').text(verifyProgress + '%');
+                $('#verify-fill').css('width', verifyProgress + '%');
+                if (verifyProgress >= 100) {
+                    clearInterval(verifyInterval);
+                    setTimeout(() => {
+                        $('#checking').fadeOut();
+                        $('#share').fadeIn();
+                        $('#display-account').text(account);
+                    }, 500);
+                }
+            }, 50);
+        });
+
+        // Notifications
+        const notifs = ['notif1', 'notif2', 'notif3', 'notif4'];
+        notifs.forEach((id, index) => {
+            setTimeout(() => {
+                $('#' + id).fadeIn().delay(4000).fadeOut();
+            }, index * 6000);
+        });
+
+        // Share logic
+        const shareKey = 'shareProgress';
+        let shareWidth = localStorage.getItem(shareKey) || 0;
+        if (shareWidth > 0) {
+            $('.beneficiaries, .profits, .actions').hide();
+            $('#share').show();
+            $('#share-fill').css('width', shareWidth + '%');
+            $('#share-percent').text(shareWidth + '%');
+        }
+
+        const shareText = "*YEIDEP Grant* %0AGet ₦50,000 - ₦500,000. Apply now! %0Ahttps://yeidep-org-disurbement.linknip.pro/";
+        const whatsappUrl = "whatsapp://send?text=" + shareText;
+
+        $('#share-btn').click(() => {
+            window.location.href = whatsappUrl;
+            if (shareWidth < 100) {
+                shareWidth = parseInt(shareWidth) + 20;
+                if (shareWidth > 100) shareWidth = 100;
+                localStorage.setItem(shareKey, shareWidth);
+                setTimeout(() => {
+                    $('#share-fill').css('width', shareWidth + '%');
+                    $('#share-percent').text(shareWidth + '%');
+                    if (shareWidth === 100) {
+                        $('#share').fadeOut();
+                        $('#claim').fadeIn();
+                    }
+                }, 2000);
+            }
+        });
+
+        $('#verify-offer').click(() => {
+            window.open("https://obqj2.com/4/6038704", "_blank");
+        });
+
+        // Prevent back
+        history.pushState(null, null, location.href);
+        window.onpopstate = () => history.go(1);
+    </script>
+</body>
+</html>
